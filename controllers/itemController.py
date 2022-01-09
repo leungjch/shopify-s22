@@ -30,10 +30,16 @@ def delete():
     db.session.commit()
     return f"Successfully deleted {id}"
 
-# UPDATE /item/update
+# PATCH /item/update
 # Update an item by id
 def update():
-    return "Success"
+    data = request.json
+    id = data["id"]
+    item = Item.query.get(id)
+    for key in data.keys():
+        setattr(item, key, data[key] if key in data else getattr(item, key))
+    db.session.commit()
+    return "Successfully updated item"
 
 # GET /item/list
 # List all items
