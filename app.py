@@ -1,7 +1,8 @@
-from flask import Flask, request, jsonify, Response, make_response
+from flask import Flask, request, jsonify, Response, make_response, render_template
 from config import Config
 from db import db
 from routes.itemBlueprint import itemBp
+from sqlalchemy import desc
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI']=Config.DATABASE_URI
@@ -17,8 +18,9 @@ with app.app_context():
 
 # Register a root route
 @app.route("/", methods=["get"])
-def test():
-    return {"message": "Shopify backend challenge!"}
+def home():
+    items = Item.query.order_by(desc(Item.date)).all()
+    return render_template('home.html', items=items)
 
 # Register the item routes as /item/*
 app.register_blueprint(itemBp, url_prefix="/item")

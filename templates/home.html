@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Shopify Backend Challenge</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <div class="container">
+
+
+        <br>
+        <h1>Inventory System</h1>
+        <p>This inventory system was built with Flask backend, a PostgreSQL database, and SQLAlchemy ORM.</p>
+
+        <div class="row">
+            <div class="col-sm-8">
+                <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#createModal">Create Item</button>
+            </div>
+            <!-- Modal -->
+            <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <form id="editItem" method="post" action={{ url_for('item.create')}}>
+                            <div class="modal-header">
+                                <h5 class="modal-title">Modal title</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                  <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label for="name">New name</label>
+                                    <input type="text" class="form-control" id="name" name="name" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Description</label>
+                                    <input type="text" class="form-control" id="description" name="description"
+                                        value="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="stock">Stock</label>
+                                    <input type="number" class="form-control" id="stock" name="stock" min=0
+                                        value="1">
+                                </div>
+
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+
+                    </div>
+                    </form>
+
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <a href="/item/export"><button class="btn btn-success btn-block">Export to CSV</button></a>
+
+            </div>
+        </div>
+        <br>
+        <p>Current items in inventory database:</p>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Stock</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in items %}
+                <tr>
+                    <!-- Show data -->
+                    <td>{{item.name}}</td>
+                    <td>{{item.description}}</td>
+                    <td>{{item.stock}}</td>
+                    <td>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                            Edit
+                        </button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <form id="editItem" method="post" action={{ url_for('item.update', itemId=item.id)
+                                        }}>
+
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Edit item</h5>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+
+                                        <div class="modal-body">
+                                            <div class="form-group">
+                                                <label for="name">New name</label>
+                                                <input type="text" class="form-control" id="name" name="name"
+                                                    value="{{item.name}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="name">Description</label>
+                                                <input type="text" class="form-control" id="description"
+                                                    name="description" value="{{item.description}}">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="stock">Stock</label>
+                                                <input type="number" class="form-control" id="stock" name="stock" min=0
+                                                    value="{{item.stock}}">
+                                            </div>
+
+
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Submit</button>
+                                        </div>
+
+                                </div>
+                                </form>
+
+                            </div>
+                        </div>
+
+                        <!-- <form method="post" action={{ url_for('item.delete', itemId=item.id) }}>
+                    <input class="btn" type="submit" name="delete" value="Edit">
+                </form> -->
+                    </td>
+                    <!-- Delete button -->
+                    <td>
+                        <form method="post" action={{ url_for('item.delete', itemId=item.id) }}>
+                            <input class="btn btn-danger" type="submit" name="delete" value="Delete">
+                        </form>
+                    </td>
+
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+</body>
+
+</html>

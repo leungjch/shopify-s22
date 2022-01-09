@@ -1,5 +1,8 @@
 from flask import Blueprint, request, render_template, \
-                  flash, g, session, redirect, url_for
+                  flash, g, session, redirect, url_for, \
+                make_response
+from io import StringIO
+import csv
 
 from models.Item import Item
 from flask_sqlalchemy import SQLAlchemy
@@ -9,37 +12,40 @@ from db import db
 
 # POST /item/create
 def create():
-    data = request.json
+    # data = request.json
+    data = request.form
+    print(data)
     item = Item(
-        name = data.get("name"),
-        type = data.get("type"),
-        stock = data.get("stock"),
-        description = data.get("description"),
+        name = data.get("name", ""),
+        type = data.get("type", ""),
+        stock = data.get("stock", 0),
+        description = data.get("description", ""),
         date = datetime.datetime.now()
     )
     db.session.add(item)
     db.session.commit()
-    return f"Successfully created item {item.id}"
+    # return f"Successfully created item {item.id}"
+    return redirect(url_for("home"))
 
 # DELETE /item/delete
 # Delete an item by id
-def delete():
-    data = request.json
-    id = data.get("id")
-    Item.query.filter_by(id=id).delete()
+def delete(itemId):
+    item = Item.query.get_or_404(itemId)
+    db.session.delete(item)
     db.session.commit()
-    return f"Successfully deleted {id}"
+    return redirect(url_for('home'))
 
 # PATCH /item/update
 # Update an item by id
-def update():
-    data = request.json
-    id = data["id"]
-    item = Item.query.get(id)
+def update(itemId):
+    print("REQ IS", request)
+    data = request.form
+    print("dat is", data)
+    item = Item.query.get_or_404(itemId)
     for key in data.keys():
         setattr(item, key, data[key] if key in data else getattr(item, key))
     db.session.commit()
-    return "Successfully updated item"
+    return redirect(url_for('home'))
 
 # GET /item/list
 # List all items
@@ -48,3 +54,23 @@ def list():
     result = Item.query.order_by(Item.date).all()
     resultJson = [x.serialize for x in result]
     return jsonify(resultJson)
+
+# Extra feature:
+# GET /item/export
+# Export the table as a csv
+def export():
+    io = StringIO()
+    cw = csv.writer(io)
+    query = Item.query.order_by(Item.date).all()
+
+    # Write the column names
+    cw.writerow([x for x in query[0].serialize.keys()])
+
+    for book in query:
+        "dat is"
+        cw.writerow([str(x) for x in book.serialize.values()])
+    #     cw.writerows(str(x) for x in book.serialize.values())
+    output = make_response(io.getvalue())
+    output.headers["Content-Disposition"] = "attachment; filename=export.csv"
+    output.headers["Content-type"] = "text/csv"
+    return output
