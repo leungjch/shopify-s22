@@ -1,4 +1,4 @@
-# shopify-backend-s22
+# Shopify Backend Challenge
 A CRUD inventory system, built using Flask (Python), PostgreSQL database, and SQLAlchemy ORM. I used Jinja HTML templating for the frontend. 
 ![](screenshots/screenshot.png)
 # Setup
