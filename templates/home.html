@@ -37,9 +37,17 @@
 
                             <div class="modal-body">
                                 <div class="form-group">
-                                    <label for="name">New name</label>
-                                    <input type="text" class="form-control" id="name" name="name" value="">
+                                    <label for="name">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name" value="Apple">
                                 </div>
+                                <div class="form-group">
+                                    <label for="type">Category</label>
+                                    <select class="form-control" name="type" id="type">
+                                        <option value="Food" selected>Food</option>
+                                        <option value="Clothing">Clothing</option>
+                                        <option value="Electronics">Electronics</option>
+                                      </select>
+                                  </div>
                                 <div class="form-group">
                                     <label for="name">Description</label>
                                     <input type="text" class="form-control" id="description" name="description"
@@ -75,8 +83,11 @@
             <thead>
                 <tr>
                     <th>Name</th>
+                    <th>Category</th>
                     <th>Description</th>
                     <th>Stock</th>
+                    <th>Date added</th>
+
                     <th></th>
                 </tr>
             </thead>
@@ -85,14 +96,17 @@
                 <tr>
                     <!-- Show data -->
                     <td>{{item.name}}</td>
+                    <td>{{item.type}}</td>
                     <td>{{item.description}}</td>
                     <td>{{item.stock}}</td>
+                    <td>{{item.date.strftime('%Y-%m-%d %H:%M:%S')}}</td>
+
                     <td>
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target={{"#exampleModal"+item.id|string}}>
                             Edit
                         </button>
                         <!-- Modal -->
-                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
+                        <div class="modal fade" id={{"exampleModal"+item.id|string}} tabindex="-1" role="dialog"
                             aria-labelledby="exampleModalLabel" aria-hidden="true">
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
@@ -112,6 +126,15 @@
                                                 <input type="text" class="form-control" id="name" name="name"
                                                     value="{{item.name}}">
                                             </div>
+                                            <div class="form-group">
+                                                <label for="type">Category</label>
+                                                <select class="form-control" name="type" id="type">
+                                                    <option value="Food" {% if item.type == "Food" %} selected {% endif %}>Food</option>
+                                                    <option value="Clothing"  {% if item.type == "Clothing" %} selected {% endif %}>Clothing</option>
+                                                    <option value="Electronics"  {% if item.type == "Electronics" %} selected {% endif %}>Electronics</option>
+                                                  </select>
+                                              </div>
+                                            
                                             <div class="form-group">
                                                 <label for="name">Description</label>
                                                 <input type="text" class="form-control" id="description"
