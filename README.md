@@ -1,5 +1,5 @@
 # shopify-backend-s22
-A CRUD inventory system, built using Flask (Python) and PostgreSQL database. I used Jinja HTML templating for the frontend. 
+A CRUD inventory system, built using Flask (Python), PostgreSQL database, and SQLAlchemy ORM. I used Jinja HTML templating for the frontend. 
 # Setup
 
 Install `python` (3.8 or higher) and `pip` if you have not already.
@@ -19,7 +19,7 @@ python app.py
 > When building, consider how more features could be added in the future. 
 
 This backend follows the **Model-View-Controller (MVC)** design pattern. In the app we have:
-- **Models**: In `Item.py` the inventory table schema is defined
+- **Models**: In `Item.py` the inventory table schema is defined with the expected data types for each item object. 
 - **Controllers**: In `controllers/itemController.py` handles the actual CRUD operations in SQL and other logic (e.g. converting table into .csv file). We define the API routes in `routes/itemBlueprint.py` which uses Flask's Blueprint feature for modularity. 
 - **Views**: The frontend is an Jinja HTML template in `templates/home.html` served by Flask. 
 
