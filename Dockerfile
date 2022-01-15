@@ -17,4 +17,3 @@ ENTRYPOINT [ "python" ]
 EXPOSE 8000
 
 CMD [ "app.py" ]
-
