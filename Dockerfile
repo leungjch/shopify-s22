@@ -12,8 +12,6 @@ RUN pip install -r requirements.txt
 
 COPY . /app
 
-ENTRYPOINT [ "python" ]
-
 EXPOSE 8000
 
-CMD [ "app.py" ]
+CMD ["python", "app.py" ]
