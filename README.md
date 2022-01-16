@@ -1,5 +1,5 @@
 # Shopify Backend Challenge
-[Demo](http://shopify-s22-challenge.eba-r8wjufxi.us-west-2.elasticbeanstalk.com/)
+[Demo hosted on AWS Elastic Beanstalk](http://shopify-s22-challenge.eba-r8wjufxi.us-west-2.elasticbeanstalk.com/)
 
 A CRUD inventory system, built using Flask (Python), PostgreSQL database, and SQLAlchemy ORM. I used Jinja HTML templating for the frontend. 
 ![](screenshots/screenshot.png)
