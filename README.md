@@ -29,6 +29,21 @@ This backend follows the **Model-View-Controller (MVC)** design pattern. In the 
 This organization allows for a high degree of modularity and extensibility. For example, if we were to add a user login / authentication feature, we would design a separate model `User.py` containing the relevant schema for a user records table, and `userController.py` for handling the authentication logic. 
 
 
+```
+.
+├── app.py
+├── db.py
+...
+├── controllers
+│   └── itemController.py
+├── models
+│   └── Item.py
+├── routes
+│   └── itemBlueprint.py
+└── templates
+    └── home.html
+```
+
 
 # API Documentation
 
